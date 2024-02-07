@@ -1,0 +1,25 @@
+name: Build, tag, push, and make available image to pods
+on:
+  release:
+    types: [published]
+    tags:
+      - "v*.*.*"
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build-tag-push:
+    name: Build, tag, and push image to Amazon ECR
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Build, tag, and push image to Amazon ECR
+        uses: moj-analytical-services/actions-build-and-push-to-ecr@v1
+        with:
+          role-to-assume: arn:aws:iam::189157455002:role/data-engineering-ga-ecr
+        env:
+          username: ${{ secrets.DOCKERHUB_DE_USERNAME }}
+          pat: ${{ secrets.DOCKERHUB_READ_ONLY_PAT }}
+      - name: Add cross-account permissions to an image on ECR
+        uses: moj-analytical-services/actions-cross-account-ecr@v1
+        with:
+          role-to-assume: arn:aws:iam::189157455002:role/data-engineering-ga-ecr
