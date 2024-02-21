@@ -6,9 +6,9 @@ airflow-de-intro-project
 
 While creating your own repo using the template of your choice, please ensure moj-analytical-services is designated as the owner of the repo. If your own GitHub account is left as owner, then the GitHub Action used to publish your image will fail when trying to run.
 
-The image will have the same name as the repo name so make sure it is appropriate and reflects the pipeline you intend to run. If you are creating an example pipeline call it airflow-{username}-example
+The image will have the same name as the repo name so make sure it is appropriate and reflects the pipeline you intend to run. If you are creating an example pipeline call it airflow-de-intro-project-{username}
 
-Review the scripts/run.py or scripts/run.R file. This has some code to write and copy to S3. Leave as-is if you are creating an example pipeline. Otherwise replace with your own logic (see Tips on writing the code)
+Review the scripts/run.py. This has some code to write and copy to S3. Leave as-is if you are creating an example pipeline. Otherwise replace with your own logic.
 
 Review the Dockerfile and the parent image and update as necessary (see Dockerfile). Leave as-is if creating the example pipeline
 
