@@ -21,4 +21,4 @@ COPY docs/ docs/
 # Ensures necessary permissions available to user in docker image
 RUN chmod -R 777 .
 
-ENTRYPOINT python -u scripts/main.py
+ENTRYPOINT python -u scripts/run.py
