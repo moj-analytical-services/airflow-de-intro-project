@@ -1,17 +1,18 @@
-
 def load_data_from_s3():
     """
     In this stage we need to load our dataset from an s3 bucket
     and return it to the rest of the pipeline in the form of
     a Pandas DataFrame.
-    To do this we will utilise the read() method of an arrow_pd_parser 
+    Original data source: https://github.com/datablist/sample-csv-files
+    Source file: "people-100000.csv"
+    To do this we will utilise the read() method of an arrow_pd_parser
     reader object, this method will require the path to the data
     object on s3
-    Arrow PD Parser: 
+    Arrow PD Parser:
     https://github.com/moj-analytical-services/mojap-arrow-pd-parser
-    
     """
     return df
+
 
 def cast_columns_to_correct_types(df):
     """
@@ -23,6 +24,7 @@ def cast_columns_to_correct_types(df):
     """
     return df
 
+
 def add_mojap_columns_to_dataframe(df):
     """
     In this stage we need to add a set of columns to the dataframe and
@@ -33,10 +35,22 @@ def add_mojap_columns_to_dataframe(df):
     the metadata object.
     Once this is done, columns should be added to the dataframe ensuring the
     correct data type is used.
+
+    The columns we will add are:
+    "mojap_start_datetime" - This is derived from the "Source extraction date"
+    column in the provided data. This will be used for scd2 in the future.
+    "mojap_image_tag" - This is the release version of the script being used
+    to produce the curated table. This value should be passed as an environment
+    variable from the Airflow Dag.
+    "mojap_raw_filename" - This is the name of the source file the data originated
+    in.
+    "mojap_task_timestamp" - This is the time the Airflow Task was initiated. This
+    should be passed as an environment variable from the Airflow Dag.
     """
     return df
 
-def write_data_to_s3(df):
+
+def write_curated_table_to_s3(df):
     """
     Once all transformations on the dataframe are completed we need to write
     the data to an appropriate s3 bucket written in .parquet format.
@@ -45,8 +59,18 @@ def write_data_to_s3(df):
     AWS Wrangler can be used to acheive this:
     https://github.com/aws/aws-sdk-pandas
     specifically the create_parquet_table method of the Catalogue module.
-    Before this, we will need to convert the metadata to an appropriate format using
-    a GlueConverter object from Mojap Metadata
+    Before this, we will need to convert the metadata to an appropriate format
+    using a GlueConverter object from Mojap Metadata
     """
     return
 
+
+def move_completed_files_to_raw_hist():
+    """
+    When all processing on a file has successfully completed and that data has
+    been written, that file should be moved from the Land folder to the
+    Raw Hist folder. This allows us to maintain a history of all data sources
+    over time, enabling rebuild of our databases in the case of errors being
+    identified.
+    """
+    return
