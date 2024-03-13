@@ -7,7 +7,7 @@ All data in this repository was adapted from a synthetic open dataset originally
 
 ## How to use (WIP)
 
-Initially clone this repo.
+Initially fork this repo, then clone it to a local git project. This will allow changes you make to not conflict with changes by other users of this intro project. This is important later on when you start running the pipeline as an airflow job.
 
 In scripts/functions.py we have defined some basic abstract functions which cover the main stages required for this pipeline with instructions in the doc string suggesting tools which should be used to perform these actions. 
 
