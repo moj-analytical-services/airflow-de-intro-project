@@ -74,3 +74,16 @@ def move_completed_files_to_raw_hist():
     identified.
     """
     return
+
+def apply_scd2():
+    """
+    The third data file "people-part3.parquet" contains updates to some entries
+    in the first two data files. To allow for 'rewinding' of the database to
+    an earlier state, important for reproduceability, we need to apply scd2
+    (slowly changing dimension Type 2 - 
+    https://en.wikipedia.org/wiki/Slowly_changing_dimension) based on the
+    mojap_start_datetime column.
+    The updated rows are for user ID 'e09c4f4cbfEFaFd',
+    'eda7EcaF87b2D80' and '9C4Df1246ddf543'
+    Further instructions TBC.
+    """
