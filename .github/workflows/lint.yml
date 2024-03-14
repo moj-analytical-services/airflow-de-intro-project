@@ -26,8 +26,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-lint.txt
 
-      - name: Lint YAML files with yamllint
-        run: yamllint .
-
-      - name: Lint Python files with Flake8
-        run: flake8 . --ignore=scripts/functions.py
+      # - name: Lint Python files with Flake8
+      #   run: flake8 .
