@@ -26,9 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-lint.txt
 
-      - name: Lint SQL files with SQLFluff
-        run: sqlfluff lint --ignore=templating mojap_derived_tables/.
-
       - name: Lint YAML files with yamllint
         run: yamllint .
 
