@@ -1,5 +1,4 @@
 import os
-import tempfile
 from dataengineeringutils3.s3 import (
     write_local_folder_to_s3,
 )
