@@ -30,4 +30,4 @@ jobs:
         run: yamllint .
 
       - name: Lint Python files with Flake8
-        run: flake8 . --ignore scripts/functions.py
+        run: flake8 . --ignore=scripts/functions.py
