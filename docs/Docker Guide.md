@@ -1,5 +1,3 @@
-# Task 1 #
-
 ## Set up and install Docker ##
 
 A Dockerfile is a script used to build a Docker image. It contains instructions to assemble an image by specifying a base image, adding dependencies and configuring the environment.
