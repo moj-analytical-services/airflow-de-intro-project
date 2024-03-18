@@ -1,0 +1,15 @@
+1.  On GitHub.com, navigate to the  [airflow-de-intro-project](https://github.com/moj-analytical-services/airflow-de-intro-project)  repository.
+    
+2.  In the top-right corner of the page, click  **Fork**.
+    
+    ![Screenshot of the main page of repository. A button, labeled with a fork icon and "Fork 59.3k," is outlined in dark orange.](https://docs.github.com/assets/cb-40742/images/help/repository/fork-button.png)
+    
+3.  Under "Owner," select the dropdown menu and click an owner for the forked repository. Choose moj-analytical-services as the owner.
+    
+4.  By default, forks are named the same as their upstream repositories. To change this, add your github username at the end of the repo. E.g airflow-de-intro-project-tomholt1
+    
+5.  Optionally, in the "Description" field, type a description of your fork.
+    
+6.  Optionally, select  **Copy the DEFAULT branch only**.
+
+7.  Click  **Create fork**.
