@@ -4,7 +4,7 @@ from dataengineeringutils3.s3 import (
 )
 
 run = os.getenv("RUN")
-file_to_write = os.getenv("PATH")
+file_to_write = os.getenv("DATA_PATH")
 write_outpath = os.getenv("OUTPATH")
 
 if run == "write":
