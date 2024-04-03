@@ -1,5 +1,5 @@
-ARG DE_ECR 
-FROM ${DE_ECR}/python:3.9-slim
+# ARG DE_ECR 
+FROM python:3.9-slim
 # There are a number of other source images available:
 # FROM ${DE_ECR}/python:3.9-bullseye
 # FROM ${DE_ECR}/python:3.8-bullseye
