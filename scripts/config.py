@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     there is no env var with that name set, applies the default value. If
     not set and no default value specified, throws an error (these are not
     optional and are required to be set via the DAG)"""
-    AWS_REGION: str = "eu-west-1"
+    AWS_REGION: str = "eu-west-2"
     MOJAP_EXTRACTION_TS: int
     MOJAP_IMAGE_VERSION: str
     TABLE_PREFIX: Optional[str] = None
