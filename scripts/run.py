@@ -1,4 +1,4 @@
-# Nothing has been changed just want to create a image
+# Nothing has been changed I just want to build a image
 import os
 from dataengineeringutils3.s3 import (
     write_local_folder_to_s3,
