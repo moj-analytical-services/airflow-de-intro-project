@@ -64,9 +64,8 @@ Follow these steps to build and test your Docker image locally:
 
 ### Load Data from S3
 
-- Load dataset from an S3 bucket and return it as a Pandas DataFrame.
-- Original data source: [sample-csv-files](https://github.com/datablist/sample-csv-files).
-- Source file: "people-100000.csv".
+- Load dataset from an S3 bucket and return it as a Pandas DataFrame. 
+- Three parquet files, representing extractions from a source database, are found in data/example-data/ in this repository, with mojap metadata found in data/metadata/. These have been adapted from [sample-csv-files](https://github.com/datablist/sample-csv-files) "people-100000.csv".
 - Utilize the `read()` method of an `arrow_pd_parser` reader object.
 - [Arrow PD Parser](https://github.com/moj-analytical-services/mojap-arrow-pd-parser).
 
