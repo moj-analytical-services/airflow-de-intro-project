@@ -22,8 +22,11 @@ class Settings(BaseSettings):
     MOJAP_EXTRACTION_TS: int
     MOJAP_IMAGE_VERSION: str
     TABLE_PREFIX: Optional[str] = None
-    TABLES: Optional[Union[str, List[str]]] = None
+    TABLES: Optional[str] = None #ßOptional[Union[str, List[str]]] = None
+
     LANDING_FOLDER: Optional[str] = None
+    RAW_HIST_FOLDER: Optional[str] = None
+    CURATED_FOLDER: Optional[str] = None
     METADATA_FOLDER: Optional[str] = None
     # Name of the secret in the AWS Parameter Store
     SECRET_NAME_USER: str = f"{DEFAULT_SECRET_PREFIX}user-name"
@@ -66,10 +69,11 @@ class Settings(BaseSettings):
         return bool(match(strg))
 
 
-print("Instantiating settings")
+print("Instantiating settings ...")
 if LOCAL_DEV_MODE:
     settings = Settings(_env_file="dev.env")
 else:
     settings = Settings()
+    
 os.environ["AWS_REGION"] = settings.AWS_REGION
 os.environ["AWS_DEFAULT_REGION"] = settings.AWS_REGION

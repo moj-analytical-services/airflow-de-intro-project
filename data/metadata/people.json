@@ -1,6 +1,6 @@
 {
     "$schema": "https://moj-analytical-services.github.io/metadata_schema/mojap_metadata/v1.3.0.json",
-    "name": "People",
+    "name": "Peoples_Data",
     "description": "",
     "file_format": "parquet",
     "sensitive": false,
@@ -36,8 +36,8 @@
         },
         {
             "name": "Date of birth",
-            "type": "timestamp(s)",
-            "datetime_format": "%Y-%m-%d",
+            "type": "timestamp(ms)",
+            "datetime_format": "%Y-%m-%dT%H:%M:%S",
             "description": "A Users date of birth"
         },
         {
@@ -47,8 +47,8 @@
         },
         {
             "name": "Source extraction date",
-            "type": "timestamp(s)",
-            "datetime_format": "%Y-%m-%d",
+            "type": "timestamp(ms)",
+            "datetime_format": "%Y-%m-%dT%H:%M:%S",
             "description": "Timestamp for start of record's presence in database"
         }
     ],

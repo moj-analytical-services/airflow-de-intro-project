@@ -155,130 +155,116 @@ print(df)
 import boto3
 from botocore.exceptions import ClientError
 
-def create_or_update_table(db_dict, table_dict, overwrite_table=False):
-    gc = GlueConverter()
-    glue_client = boto3.client("glue", region_name="eu-west-1")
+def write_curated_table_to_s3(
+    df: pd.DataFrame, overwrite_table: Optional[bool] = True
+):
 
-    try:
-        glue_client.get_database(Name=db_dict['name'])
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityNotFoundException':
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": db_dict['description'],
-                    "Name": db_dict['name']
-                }
-            }
-            glue_client.create_database(**db_meta)
-        else:
-            print("Unexpected error: %s" % e)
+    # Parameters
+    db_dict: Dict[str, Union[str, None]] = {
+        "name": "dami_intro_project", # database name
+        "description": "database with data from people parquet",
+        "table_name": "peoples", # table name
+        "table_location": settings.CURATED_FOLDER #"s3://dami-test-bucket786567/de-intro/",
+    }
 
-    try:
-        table_exists = True
-        glue_client.get_table(
-            DatabaseName=db_dict['name'],
-            Name=table_dict['name']
-        )
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityNotFoundException':
-            table_exists = False
-        else:
-            print("Unexpected error: %s" % e)
+    db_meta: Dict[str, Union[str, None]] = {
+        "DatabaseInput": {
+            "Name": db_dict["name"],
+            "Description": db_dict["description"],
+        }
+    }
 
-    if table_exists:
-        if overwrite_table:
-            print(f"Deleting existing table {table_dict['name']} in database {db_dict['name']}")
-            glue_client.delete_table(
-                DatabaseName=db_dict['name'],
-                Name=table_dict['name']
-            )
-            table_meta = gc.convert_dict_to_table_input(table_dict)
-            glue_client.create_table(
-                DatabaseName=db_dict['name'],
-                TableInput=table_meta
-            )
-            print(f"Table {table_dict['name']} created in database {db_dict['name']}")
-        else:
-            print(f"Table {table_dict['name']} already exists in database {db_dict['name']}")
-    else:
-        table_meta = gc.convert_dict_to_table_input(table_dict)
-        glue_client.create_table(
-            DatabaseName=db_dict['name'],
-            TableInput=table_meta
-        )
-        print(f"Table {table_dict['name']} created in database {db_dict['name']}")
-
-
-#-------------------
-def write_curated_table_to_s3():
+    # Load metadata
     metadata = update_metadata()
-
-    db_dict = {'name': "dami_intro_project",
-           'description': 'database with data from people parquet',
-           'table_name': 'people',
-           'table_location': "s3://dami-test-bucket786567/de-intro/"
-           }
-
     gc = GlueConverter()
-    glue_client = boto3.client("glue", region_name="eu-west-1")
+    glue_client = boto3.client("glue")
 
     # Create Database
     try:
-        glue_client.get_database(Name=db_dict['name'])
+        glue_client.get_database(Name=db_dict["name"])
     except ClientError as e:
-        if e.response['Error']['Code'] == 'EntityNotFoundException':
-            db_meta = {
-                "DatabaseInput": {
-                    "Description": db_dict['description'],
-                    "Name": db_dict['name']
-                }
-            }
+        if (
+            e.response["Error"]["Code"]
+            == "EntityNotFoundException"
+        ):
             glue_client.create_database(**db_meta)
         else:
-            print("Unexpected error: %s" % e)
+            print(f"Unexpected error: {e}")
 
+    # Create Table
     try:
+        table_exists = True
         glue_client.get_table(
-            DatabaseName=db_dict['name'],
-            Name=db_dict['table_name']
+            DatabaseName=db_dict["name"],
+            Name=db_dict["table_name"],
         )
-        print(f"Table {db_dict['table_name']} already exists in database {db_dict['name']}")
     except ClientError as e:
-        if e.response['Error']['Code'] == 'AlreadyExistsException':
-            print(f"Table {db_dict['table_name']} already exists in database {db_dict['name']}")
+        if (
+            e.response["Error"]["Code"]
+            == "EntityNotFoundException"
+        ):
+            table_exists = False
         else:
-            print("Unexpected error: %s" % e)
+            print(f"Unexpected error: {e}")
+    if table_exists:
+        if overwrite_table:
+            print(
+                f"Deleting existing table - '{db_dict['table_name']}' in database - '{db_dict['name']}'"
+            )
 
-    wr.catalog.delete_table_if_exists(database=db_dict['name'], table=db_dict['table_name'])
+            wr.catalog.delete_table_if_exists(
+                database=db_dict["name"],
+                table=db_dict["table_name"],
+            )
+            spec = gc.generate_from_meta(
+                metadata,
+                database_name=db_dict["name"],
+                table_location=db_dict["table_location"],
+            )
+            glue_client.create_table(**spec)
 
-    spec = gc.generate_from_meta(metadata, database_name=db_dict['name'], table_location=db_dict['table_location'])
-    glue_client.create_table(**spec)
-
-    # print(boto_dict)
-
-    # boto_dict = gc.generate_from_meta(metadata)
-
-    file_path = s3_path_join(
-            db_dict['table_location'], f"{db_dict['table_name']}{time.time_ns()}.parquet"
+            print(
+                f"Table - '{db_dict['table_name']}' created in database - '{db_dict['name']}'"
+            )
+        else:
+            print(
+                f"Table {db_dict['table_name']} already exists in database {db_dict['name']}"
+            )
+    else:
+        spec = gc.generate_from_meta(
+            metadata,
+            database_name=db_dict["name"],
+            table_location=db_dict["table_location"],
         )
+        glue_client.create_table(**spec)
+        print(
+            f"Table {db_dict['table_name']} created in database {db_dict['name']}"
+        )
+    print(
+        f"writing Data to Table {db_dict['table_name']} in database {db_dict['name']}"
+    )
+    file_path = s3_path_join(
+        db_dict["table_location"],
+        f"{db_dict['table_name']}.parquet",  # {time.time_ns()}
+    )
+
+    # Write the parquet file
     writer.write(
-        df=df1,
+        df=df,
         output_path=file_path,
-        metadata=athena_columns(metadata),
+        metadata=metadata,
         file_format="parquet",
     )
 
     # Register the table with the Glue Catalog
     wr.catalog.create_parquet_table(
-        database=db_dict['name'],#"dami_intro_project",
-        table=db_dict['table_name'],
-        path=db_dict['table_location'],
+        database=db_dict["name"],
+        table=db_dict["table_name"],
+        path=db_dict["table_location"],
         columns_types=athena_columns(metadata),
-        # partition_cols=["mojap_start_datetime"],
         description="Curated people data",
     )
-    
-    print(athena_columns(metadata))
+
 
 
 write_curated_table_to_s3()
