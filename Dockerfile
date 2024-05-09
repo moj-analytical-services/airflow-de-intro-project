@@ -9,6 +9,9 @@ FROM python:3.9-slim
 # FROM ${DE_ECR}/oraclelinux8-python:3.8
 
 # Create a working directory to do stuff from
+# Set environment variables
+ENV S3_BUCKET_NAME "airflow-intro-test-murad"
+ENV S3_FOLDER_PATH "loaded_data/"
 WORKDIR /etl
 
 COPY requirements.txt requirements.txt

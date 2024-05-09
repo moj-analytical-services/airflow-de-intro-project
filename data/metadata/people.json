@@ -1,0 +1,59 @@
+{
+    "$schema": "https://moj-analytical-services.github.io/metadata_schema/mojap_metadata/v1.3.0.json",
+    "name": "Peoples_Data",
+    "description": "",
+    "file_format": "parquet",
+    "sensitive": false,
+    "columns": [{
+            "name": "User Id",
+            "type": "string",
+            "description": ""
+        },
+        {
+            "name": "First Name",
+            "type": "string",
+            "description": "A Users first name"
+        },
+        {
+            "name": "Last Name",
+            "type": "string",
+            "description": "A Users last name"
+        },
+        {
+            "name": "Sex",
+            "type": "string",
+            "description": "A Users gender"
+        },
+        {
+            "name": "Email",
+            "type": "string",
+            "description": "A Users email address"
+        },
+        {
+            "name": "Phone",
+            "type": "string",
+            "description": "A Users phone number"
+        },
+        {
+            "name": "Date of birth",
+            "type": "timestamp(ms)",
+            "datetime_format": "%Y-%m-%d",
+            "description": "A Users date of birth"
+        },
+        {
+            "name": "Job Title",
+            "type": "string",
+            "description": "A Users job title"
+        },
+        {
+            "name": "Source extraction date",
+            "type": "timestamp(ms)",
+            "datetime_format": "%Y-%m-%dT%H:%M:%S",
+            "description": "Timestamp for start of record's presence in database"
+        }
+    ],
+    "primary_key": [
+        "User Id"
+    ],
+    "partitions": []
+}
